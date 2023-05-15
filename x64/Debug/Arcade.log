@@ -1,0 +1,3 @@
+﻿  Arcade.cpp
+C:\Users\nixan\source\repos\Arcade\Arcade.cpp(80,39): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Arcade.vcxproj -> C:\Users\nixan\source\repos\Arcade\x64\Debug\Arcade.exe

@@ -1,0 +1,3 @@
+C:\Users\nixan\source\repos\Arcade\x64\Debug\Arcade.exe
+C:\Users\nixan\source\repos\Arcade\x64\Debug\Arcade.vcxproj.CopyComplete
+C:\Users\nixan\source\repos\Arcade\x64\Debug\raylib.dll
