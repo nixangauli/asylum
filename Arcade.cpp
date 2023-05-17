@@ -75,7 +75,9 @@ class Enemy {
     }
 
     void draw() {
-        DrawRectangleRec(rect, color);
+       Texture2D playerTexture = LoadTexture("Images/enemy.png");
+        DrawRectangleRec(rect, BLANK);
+        DrawTexture(playerTexture, rect.x, rect.y - 50, WHITE);
     }
 };
 
@@ -111,7 +113,9 @@ public:
     Platform(Rectangle r, Color c) : rect(r), color(c) {}
 
     void draw() {
-        DrawRectangleRec(rect, color);
+ //      Texture2D playerTexture = LoadTexture("Images/background.png");
+ //       DrawTexture(playerTexture, rect.x, rect.y - 50, WHITE);
+        DrawRectangleRec(rect, BLACK);
 
     }
 };
@@ -384,6 +388,9 @@ int main()
         }
         game.update();
         game.draw();
+
+        Texture2D playerTexture = LoadTexture("Images/background.png");
+        DrawTexture(playerTexture, 0, 0, WHITE);
     }
 
     game.close();
