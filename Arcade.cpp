@@ -13,6 +13,7 @@ const int screen_Height = 600;
 
 bool toggle = true;
 
+
 class Player {
 public:
     Rectangle rect;
@@ -42,12 +43,15 @@ public:
     }
 
     void draw() {
-        DrawRectangleRec(rect, color);
+
+        Texture2D playerTexture = LoadTexture("Images/Player.png");
+        DrawRectangleRec(rect, BLANK);
+        DrawTexture(playerTexture, rect.x, rect.y - 50, WHITE);
     }
 };
 
 class Enemy {
-public:
+  public:
     Rectangle rect;
     Vector2 velocity;
     bool isMovingRight;
@@ -152,7 +156,6 @@ public:
 
     void init() {
         InitWindow(screen_Width, screen_Height, "Asylum");
-        Texture2D playerTexture = LoadTexture("Images/player.png");
         SetTargetFPS(60);
     }
 
@@ -261,6 +264,8 @@ public:
 
             // Check for player/enemy collision
             if (CheckCollisionRecs(player.rect, enemy.rect)) {
+                player.rect.x = 400;
+                player.rect.y = 500;
                 toggle = !toggle;
             }
         }
