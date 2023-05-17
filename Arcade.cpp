@@ -379,6 +379,7 @@ int main()
     Game game;
     Menu menu;
     game.init();
+    SetTraceLogLevel(LOG_ERROR);
     
 
     while (!game.isGameOver()) {
@@ -389,8 +390,8 @@ int main()
         game.update();
         game.draw();
 
-        Texture2D playerTexture = LoadTexture("Images/background.png");
-        DrawTexture(playerTexture, 0, 0, WHITE);
+        Texture2D background = LoadTexture("Images/background.png");
+        DrawTexture(background, 0, 0, WHITE);
     }
 
     game.close();
