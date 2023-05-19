@@ -1,10 +1,11 @@
 #include <raylib.h>
 #include <iostream>
 #include<vector>
+
 using namespace std;
 
 #define GRAVITY 900
-#define JUMP_HEIGHT 400
+#define JUMP_HEIGHT 500
 #define MOVE_SPEED 200
 #define ENEMY_MOVE_SPEED 100
 
@@ -12,7 +13,7 @@ const int screen_Width = 1000;
 const int screen_Height = 600;
 
 bool toggle = true;
-
+bool darkMode = false;
 
 class Player {
 public:
@@ -75,7 +76,7 @@ public:
     }
 
     void draw() {
-        Texture2D playerTexture = LoadTexture("Images/enemy.png");
+        Texture2D playerTexture = LoadTexture("Images/enemycolor.png");
         DrawRectangleRec(rect, BLANK);
         DrawTexture(playerTexture, rect.x, rect.y , WHITE);
     }
@@ -158,18 +159,18 @@ public:
         bullet(Rectangle{ 0, 0, 10, 10 }, Vector2{ 600, 20 }, false, RED),
         platform1(Rectangle{ 0, 575, 1000, 25 }, DARKGRAY),
         platform2(Rectangle{ 200, 300, 250, 25 }, DARKGRAY),
-        platform3(Rectangle{ 500, 200, 250, 25 }, DARKGRAY),
+        platform3(Rectangle{ 400, 200, 250, 25 }, DARKGRAY),
         platform4(Rectangle{ 300, 475, 250, 25 }, DARKGRAY),
         platform5(Rectangle{ 50, 150, 250, 25 }, DARKGRAY),
         platform6(Rectangle{ 600, 100, 250, 25 }, DARKGRAY),
         score(0)
     {
-        //experimental move_speed
+        //Enemy Spawn
         enemies.push_back(Enemy(Rectangle{ 350, 80, 30, 30 }, Vector2{ ENEMY_MOVE_SPEED, 0 }, true, GREEN));
-
-        //without move speed
-        enemies.push_back(Enemy(Rectangle{ 400, 350, 30, 30 }, Vector2{ 0, 0 }, true, RED));
-        enemies.push_back(Enemy(Rectangle{ 700, 250, 30, 30 }, Vector2{ 0, 0 }, true, RED));
+        enemies.push_back(Enemy(Rectangle{ 400, 350, 30, 30 }, Vector2{ ENEMY_MOVE_SPEED, 0 }, true, RED));
+        enemies.push_back(Enemy(Rectangle{ 700, 250, 30, 30 }, Vector2{ ENEMY_MOVE_SPEED, 0 }, true, RED));
+        enemies.push_back(Enemy(Rectangle{ 600, 300, 30, 30 }, Vector2{ ENEMY_MOVE_SPEED, 0 }, true, YELLOW));
+        enemies.push_back(Enemy(Rectangle{ 800, 400, 30, 30 }, Vector2{ ENEMY_MOVE_SPEED, 0 }, true, ORANGE));
     }
 
 
@@ -242,15 +243,12 @@ public:
         for (auto& enemy : enemies) {
             enemy.update(GetFrameTime(), platform1.rect);
             if (CheckCollisionRecs(enemy.rect, platform1.rect)) {
-                score++;
                 enemy.isMovingRight = !enemy.isMovingRight;
             }
 
             // Check for collision with bullet
             if (bullet.isActive && CheckCollisionRecs(bullet.rect, enemy.rect)) {
                 bullet.isActive = false;
-
-                //pain for the wasted 1 hour (main score problem NIXAN)*********SOLVED BY UTSAV*************
                 score++;
 
 
@@ -282,7 +280,7 @@ public:
 
             // Check for player/enemy collision
             if (CheckCollisionRecs(player.rect, enemy.rect)) {
-                player.rect.x = 400;
+                player.rect.x = 100;
                 player.rect.y = 500;
                 toggle = !toggle;
                 score = 0;
@@ -292,14 +290,14 @@ public:
         if (player.rect.y < 0) {
             exit(0);
         }
-        if (IsKeyPressed(KEY_P)) {
+        if (IsKeyPressed(KEY_ESCAPE)) {
             toggle = true;
         }
     }
 
     void draw() {
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(darkMode ? BLACK: WHITE);
 
 
         bullet.draw();
@@ -315,7 +313,7 @@ public:
             enemy.draw();
         }
 
-        DrawText(TextFormat("Score: %04i", score), 10, 10, 30, BLACK);
+        DrawText(TextFormat("Score: %04i", score), 10, 10, 30, darkMode ? WHITE : BLACK);
 
 
         EndDrawing();
@@ -330,13 +328,35 @@ public:
     }
 };
 
-class Menu : public Game {
+class about {
 public:
+    void about_game() {
+		bool toggle_about = true;
+        while (!WindowShouldClose()) {
+        
+			BeginDrawing();
+			ClearBackground(darkMode ? BLUE : BLACK);
+
+			DrawText("ABOUT ASYLUM", 20, 20, 40, darkMode ? BLACK : WHITE);
+			DrawText("This game is made by Nitesh, Nixan and Utsav.", 20, 100, 20, darkMode ? BLACK : WHITE);
+			DrawText("ASYLUM is an arcade game developed for learning the implementation of concepts of OOP.", 20, 120, 20, darkMode ? BLACK : WHITE);
+            DrawText("Enemy spawn randomly on the game and the player has to ", 20, 140, 20, darkMode ? BLACK : WHITE);
+            DrawText("shoot them to score points.", 20, 160, 20, darkMode ? BLACK : WHITE);
+            DrawText("Press 'ESC' to play the game", 20, 200, 20, darkMode ? BLACK : WHITE);
+			EndDrawing();
+		}
+	}
+};
+
+class Menu : public Game {
+    public:
+        about about_game;
+
     int menu(bool toggle) {
         if (toggle) {
             bool toggle_menu = true;
-            const int menu_Items_Count = 2;
-            const char* menu_Items[menu_Items_Count] = { "START", "EXIT" };
+            const int menu_Items_Count = 4;
+            const char* menu_Items[menu_Items_Count] = { "START", "ABOUT GAME", "DARK MODE", "EXIT" };
             int selected_Menu_Item = 0;
 
 
@@ -355,13 +375,13 @@ public:
                 }
 
                 BeginDrawing();
-                ClearBackground(RAYWHITE);
+                ClearBackground(darkMode ? BLACK : BLUE);
 
                 for (int i = 0; i < menu_Items_Count; i++) {
                     if (i == selected_Menu_Item)
-                        DrawText(menu_Items[i], screen_Width / 2 - MeasureText(menu_Items[i], 40) / 2, screen_Height / 2 - 60 + i * 60, 40, BLUE);
+                        DrawText(menu_Items[i], screen_Width / 2 - MeasureText(menu_Items[i], 40) / 2, screen_Height / 2 - 60 + i * 60, 40, darkMode ? BLUE : WHITE);
                     else
-                        DrawText(menu_Items[i], screen_Width / 2 - MeasureText(menu_Items[i], 40) / 2, screen_Height / 2 - 60 + i * 60, 40, GRAY);
+                        DrawText(menu_Items[i], screen_Width / 2 - MeasureText(menu_Items[i], 40) / 2, screen_Height / 2 - 60 + i * 60, 40, darkMode ? WHITE : BLACK);
                 }
 
                 if (IsKeyPressed(KEY_ENTER)) {
@@ -372,6 +392,13 @@ public:
                         toggle = false;
                         break;
                     case 1:
+                        about_game.about_game();
+						break;
+                    case 2:
+                        darkMode = !darkMode;
+                        toggle = false;
+                        break;
+                    case 3:
                         exit(0);
                         CloseWindow();
                         return 0;
@@ -386,7 +413,7 @@ public:
             }
         }
         return -1;
-    };
+    }
 };
 
 int main()
