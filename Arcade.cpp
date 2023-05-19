@@ -1,7 +1,6 @@
 #include <raylib.h>
 #include <iostream>
 #include<vector>
-
 using namespace std;
 
 #define GRAVITY 900
@@ -232,8 +231,7 @@ public:
             player.isJumping = false;
             player.velocity.y = 0;
         }
-        else if (CheckCollisionRecs(player.rect, platform6.rect) && player.velocity.y > 0
-            ) {
+        else if (CheckCollisionRecs(player.rect, platform6.rect) && player.velocity.y > 0) {
             player.rect.y = platform6.rect.y - player.rect.height;
             player.isJumping = false;
             player.velocity.y = 0;
@@ -282,6 +280,7 @@ public:
             if (CheckCollisionRecs(player.rect, enemy.rect)) {
                 player.rect.x = 100;
                 player.rect.y = 500;
+                
                 toggle = !toggle;
                 score = 0;
             }
@@ -299,7 +298,6 @@ public:
         BeginDrawing();
         ClearBackground(darkMode ? BLACK: WHITE);
 
-
         bullet.draw();
         platform1.draw();
         platform2.draw();
@@ -314,7 +312,6 @@ public:
         }
 
         DrawText(TextFormat("Score: %04i", score), 10, 10, 30, darkMode ? WHITE : BLACK);
-
 
         EndDrawing();
     }
@@ -422,7 +419,6 @@ int main()
     Menu menu;
     game.init();
     SetTraceLogLevel(LOG_ERROR);
-
 
     while (!game.isGameOver()) {
         if (toggle) {
