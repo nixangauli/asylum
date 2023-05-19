@@ -20,7 +20,7 @@ public:
     Vector2 velocity;
     bool isJumping;
     Color color;
-    
+
 
     Player(Rectangle r, Vector2 v, bool j, Color c) : rect(r), velocity(v), isJumping(j), color(c) {
     }
@@ -46,12 +46,12 @@ public:
 
         Texture2D playerTexture = LoadTexture("Images/Player.png");
         DrawRectangleRec(rect, BLANK);
-        DrawTexture(playerTexture, rect.x, rect.y - 50, WHITE);
+        DrawTexture(playerTexture, rect.x, rect.y - 30, WHITE);
     }
 };
 
 class Enemy {
-  public:
+public:
     Rectangle rect;
     Vector2 velocity;
     bool isMovingRight;
@@ -75,9 +75,9 @@ class Enemy {
     }
 
     void draw() {
-       Texture2D playerTexture = LoadTexture("Images/enemy.png");
+        Texture2D playerTexture = LoadTexture("Images/enemy.png");
         DrawRectangleRec(rect, BLANK);
-        DrawTexture(playerTexture, rect.x, rect.y - 50, WHITE);
+        DrawTexture(playerTexture, rect.x, rect.y , WHITE);
     }
 };
 
@@ -113,9 +113,24 @@ public:
     Platform(Rectangle r, Color c) : rect(r), color(c) {}
 
     void draw() {
- //      Texture2D playerTexture = LoadTexture("Images/background.png");
- //       DrawTexture(playerTexture, rect.x, rect.y - 50, WHITE);
-        DrawRectangleRec(rect, BLACK);
+        Texture2D playerTexture = LoadTexture("Images/platform.png");
+        DrawRectangleRec(rect, BLANK);
+        DrawTexture(playerTexture, rect.x, rect.y -10, WHITE);
+
+    }
+};
+
+class MainPlatform {
+public:
+    Rectangle rect;
+    Color color;
+
+    MainPlatform(Rectangle r, Color c) : rect(r), color(c) {}
+
+    void draw() {
+        Texture2D playerTexture = LoadTexture("Images/ground.png");
+        DrawRectangleRec(rect, BLANK);
+        DrawTexture(playerTexture, rect.x, rect.y - 10, WHITE);
 
     }
 };
@@ -129,7 +144,7 @@ private:
     Bullet bullet;
     Player player;
 
-    Platform platform1;
+    MainPlatform platform1;
     Platform platform2;
     Platform platform3;
     Platform platform4;
@@ -142,10 +157,10 @@ public:
         : player(Rectangle{ 10, 0, 40, 40 }, Vector2{ 0, 0 }, false, BLUE),
         bullet(Rectangle{ 0, 0, 10, 10 }, Vector2{ 600, 20 }, false, RED),
         platform1(Rectangle{ 0, 575, 1000, 25 }, DARKGRAY),
-        platform2(Rectangle{ 200, 300, 200, 25 }, DARKGRAY),
-        platform3(Rectangle{ 500, 200, 200, 25 }, DARKGRAY),
-        platform4(Rectangle{ 300, 400, 300, 25 }, DARKGRAY),
-        platform5(Rectangle{ 150, 150, 300, 25 }, DARKGRAY),
+        platform2(Rectangle{ 200, 300, 250, 25 }, DARKGRAY),
+        platform3(Rectangle{ 500, 200, 250, 25 }, DARKGRAY),
+        platform4(Rectangle{ 300, 475, 250, 25 }, DARKGRAY),
+        platform5(Rectangle{ 50, 150, 250, 25 }, DARKGRAY),
         platform6(Rectangle{ 600, 100, 250, 25 }, DARKGRAY),
         score(0)
     {
@@ -235,7 +250,6 @@ public:
             if (bullet.isActive && CheckCollisionRecs(bullet.rect, enemy.rect)) {
                 bullet.isActive = false;
 
-
                 //pain for the wasted 1 hour (main score problem NIXAN)*********SOLVED BY UTSAV*************
                 score++;
 
@@ -271,6 +285,7 @@ public:
                 player.rect.x = 400;
                 player.rect.y = 500;
                 toggle = !toggle;
+                score = 0;
             }
         }
 
@@ -380,7 +395,7 @@ int main()
     Menu menu;
     game.init();
     SetTraceLogLevel(LOG_ERROR);
-    
+
 
     while (!game.isGameOver()) {
         if (toggle) {
@@ -390,8 +405,7 @@ int main()
         game.update();
         game.draw();
 
-        Texture2D background = LoadTexture("Images/background.png");
-        DrawTexture(background, 0, 0, WHITE);
+        
     }
 
     game.close();
